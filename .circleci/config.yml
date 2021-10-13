@@ -69,6 +69,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
@@ -77,6 +78,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
@@ -85,6 +87,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
@@ -93,6 +96,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       # Checkout code from git
       # Restore from cache
       # Your job code here
@@ -101,6 +105,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+      - checkout
       # Checkout code from git
       - run:
           name: Ensure back-end infrastructure exists
@@ -135,6 +140,7 @@ jobs:
     docker:
       - image: ansible/ansible
     steps:
+      - checkout
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
@@ -154,6 +160,7 @@ jobs:
     docker:
        image: circleci/node:13.8.0
     steps:
+      - checkout
       # Checkout code from git
       - run:
           name: Run migrations
@@ -172,6 +179,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
@@ -192,6 +200,7 @@ jobs:
     docker:
       - image: ansible/ansible
     steps:
+      - checkout
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
@@ -209,6 +218,7 @@ jobs:
     docker:
       - image: circleci/python:3.7.2
     steps:
+      - checkout
       # Checkout code from git
       - run:
           name: Install dependencies
@@ -232,6 +242,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+      - checkout
       # Checkout code from git
       - run:
           name: Install dependencies
@@ -247,6 +258,7 @@ cleanup:
     docker:
       - image: circleci/python:3.7.2
     steps:
+      - checkout
       # Checkout code from git
       - run:
           name: Get old stack workflow id
