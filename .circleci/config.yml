@@ -60,7 +60,8 @@ jobs:
           name: Back-end build
           command: |
              # Your code here
-             exit 1
+             npm i --prefix backend
+             npm run lint --prefix backend
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -278,8 +279,8 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
       - build-backend
+      - build-frontend
       - test-frontend:
           requires: [build-frontend]
       - test-backend:
