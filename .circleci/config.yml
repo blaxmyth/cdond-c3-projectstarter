@@ -98,7 +98,7 @@ jobs:
           name: Build front-end
           command: |
             # Your code here
-            npm i --prefix fronten
+            npm i --prefix frontend
             
   scan-frontend:
     docker:
