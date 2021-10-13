@@ -108,7 +108,7 @@ jobs:
       # Checkout code from git
       # Restore from cache
       # Your job code here
-      - run: npm audit --audit-level=critical --prefix frontend
+      - run: npm audit fix --audit-level=critical --prefix frontend
 
   scan-backend:
     docker:
@@ -118,7 +118,7 @@ jobs:
       # Checkout code from git
       # Restore from cache
       # Your job code here
-      - run: npm audit --audit-level=critical --prefix backend
+      - run: npm audit fix --audit-level=critical --prefix backend
 
   deploy-infrastructure:
     docker:
