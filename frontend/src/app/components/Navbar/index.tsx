@@ -51,14 +51,14 @@ export class Navbar extends React.Component<Navbar.Props, Navbar.State> {
     e.preventDefault();
     const destination = '/employees';
     if (this.shouldViewChange(destination))
-      this.props.history.push(destination);
+      this.props.history.push(destination)
   };
 
   goToAddEmployee = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const destination = '/employees/new';
     if (this.shouldViewChange(destination))
-      this.props.history.push(destination);
+      this.props.history.push(destination)
   };
 
   render() {
