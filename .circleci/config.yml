@@ -33,6 +33,24 @@ commands:
             fi
             
 jobs:
+
+  build-backend:
+      docker:
+        - image: circleci/node:13.8.0
+      steps:
+        - checkout
+        - restore_cache:
+            keys: [backend-build]
+        - run:
+            name: Back-end build
+            command: |
+              # Your code here
+              npm i --prefix backend
+              npm run lint --prefix backend
+        - save_cache:
+            paths: [backend/node_modules]
+            key: backend-build
+
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -44,37 +62,12 @@ jobs:
           name: Build front-end
           command: |
             # Your code here
-            exit 1
+            npm i --prefix frontend
+            npm run lint --prefix frontend
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
 
-  build-backend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [backend-build]
-      - run:
-          name: Back-end build
-          command: |
-             # Your code here
-             npm i --prefix backend
-             npm run lint --prefix backend
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
-
-  test-frontend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
-                
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -83,6 +76,21 @@ jobs:
       # Checkout code from git
       # Restore from cache
       # Your job code here
+      - restore_cache:
+          keys:
+            - backend-build
+            
+  test-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      # Checkout code from git
+      # Restore from cache
+      # Your job code here
+      - restore_cache:
+          keys:
+            - frontend-build
             
   scan-frontend:
     docker:
