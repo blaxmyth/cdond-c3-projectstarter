@@ -82,7 +82,6 @@ jobs:
           command: |
             # Your code here
             npm i --prefix backend
-            npm audit fix
 
   test-frontend:
     docker:
@@ -99,8 +98,7 @@ jobs:
           name: Build front-end
           command: |
             # Your code here
-            npm i --prefix frontend
-            npm audit fix
+            npm i --prefix fronten
             
   scan-frontend:
     docker:

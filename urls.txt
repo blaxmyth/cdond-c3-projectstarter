@@ -1,0 +1,3 @@
+Public Url to GitHub repository (not private) [URL01]
+
+https://github.com/blaxmyth/cdond-c3-projectstarter.git
