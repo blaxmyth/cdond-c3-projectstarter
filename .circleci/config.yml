@@ -88,9 +88,9 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      Checkout code from git
-      Restore from cache
-      Your job code here
+      # Checkout code from git
+      # Restore from cache
+      # Your job code here
       - restore_cache:
           keys:
             - frontend-build
