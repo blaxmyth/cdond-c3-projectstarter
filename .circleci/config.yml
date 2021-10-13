@@ -156,11 +156,11 @@ jobs:
             exit 1
       # Here's where you will add some code to rollback on failure      
 
-  run-migrations:
-    docker:
-       image: circleci/node:13.8.0
-    steps:
-      - checkout
+  # run-migrations:
+  #   docker:
+  #      image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
       # Checkout code from git
       # - run:
       #     name: Run migrations
@@ -295,8 +295,8 @@ workflows:
               only: [test-feature-branch]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
+      # - run-migrations:
+      #     requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
       - deploy-backend:
