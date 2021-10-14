@@ -1,3 +1,7 @@
 Public Url to GitHub repository (not private) [URL01]
 
 https://github.com/blaxmyth/cdond-c3-projectstarter.git
+
+Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
+
+http://udapeople-10607691-caaa-457f-ad03-8c3758db8f09.s3-website-us-east-1.amazonaws.com

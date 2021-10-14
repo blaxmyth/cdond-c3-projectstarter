@@ -12,9 +12,9 @@ commands:
           command: |
             # Your code here
             echo "Destroying environment: <<parameters.workflow_id>> "
-            aws cloudformation delete-stack --stack-name udapeople-backend-prod-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name udacity-backend-<<parameters.workflow_id>>
             aws s3 rm s3://udapeople-prod-<<parameters.workflow_id>> --recursive
-            aws cloudformation delete-stack --stack-name udapeople-frontend-prod-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name udacity-frontend-<<parameters.workflow_id>>
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -24,6 +24,7 @@ commands:
       - run:
           name: Revert migrations
           # Add when this will run
+          when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             SUCCESS = 1
@@ -84,8 +85,7 @@ jobs:
           name: Build back-end
           command: |
             # Your code here
-            # npm i --prefix backend
-            # npm run test --prefix backend
+            npm run test --prefix backend
 
   test-frontend:
     docker:
@@ -102,8 +102,7 @@ jobs:
           name: Build front-end
           command: |
             # Your code here
-            # npm i --prefix frontend
-            # npm run test --prefix frontend
+            npm run test --prefix frontend
   
   scan-backend:
     docker:
@@ -120,6 +119,7 @@ jobs:
           name: Scan back-end
           command: |
               # Your code here
+              npm audit --audit-level=critical
               npm audit fix --audit-level=critical --prefix backend
   scan-frontend:
     docker:
@@ -131,13 +131,13 @@ jobs:
       - restore_cache:
           keys:
             - frontend-build
-      # # Your job code here
-      # - run:
-      #     name: Scan front-end
-      #     command: |
-      #         # Your code here
-      #         # npm install -g npm-install-missing
-      #         npm audit fix --audit-level=critical --prefix frontend
+      # Your job code here
+      - run:
+          name: Scan front-end
+          command: |
+              # Your code here
+              npm audit --audit-level=critical
+              npm audit fix --audit-level=critical --prefix frontend
 
   deploy-infrastructure:
     docker:
@@ -181,45 +181,45 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
-      # - destroy_environment:
-      #     workflow_id: "${CIRCLE_WORKFLOW_ID}"      
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"      
 
-  configure-infrastructure:
+  # configure-infrastructure:
+  #   docker:
+  #     - image: ansible/ansible
+  #   steps:
+  #     - checkout
+  #     # Checkout code from git
+  #     # Add ssh keys with fingerprint
+  #     # attach workspace
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           # Your code here
+  #           exit 1
+  #     - run:
+  #         name: Configure server
+  #         command: |
+  #           # Your code here
+  #           exit 1
+  #     # Here's where you will add some code to rollback on failure      
+
+  run-migrations:
     docker:
-      - image: ansible/ansible
+       image: circleci/node:13.8.0
     steps:
       - checkout
       # Checkout code from git
-      # Add ssh keys with fingerprint
-      # attach workspace
       - run:
-          name: Install dependencies
+          name: Run migrations
           command: |
             # Your code here
             exit 1
       - run:
-          name: Configure server
+          name: Send migration results to memstash
           command: |
             # Your code here
             exit 1
-      # Here's where you will add some code to rollback on failure      
-
-  # run-migrations:
-  #   docker:
-  #      image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
-      # Checkout code from git
-      # - run:
-      #     name: Run migrations
-      #     command: |
-      #       # Your code here
-      #       exit 1
-      # - run:
-      #     name: Send migration results to memstash
-      #     command: |
-      #       # Your code here
-      #       exit 1
      # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
@@ -341,10 +341,10 @@ workflows:
           filters:
             branches:
               only: [master]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
           # requires: [run-migrations]
       # - deploy-backend:
