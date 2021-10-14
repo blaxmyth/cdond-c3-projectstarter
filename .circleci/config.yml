@@ -143,14 +143,20 @@ jobs:
       - checkout
       # Checkout code from git
       - run:
+          name: Configure AWS CLI with credentials and region
+          command: |
+            aws configure set \
+              aws_access_key_id $AWS_ACCESS_KEY_ID \
+              aws_secret_access_key $AWS_SECRET_ACCESS_KEY \
+              region $AWS_REGION
+      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=your-tag \
               --stack-name "udacity-${CIRCLE_WORKFLOW_ID}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}" \
-              --region us-east-1
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -158,8 +164,7 @@ jobs:
               --template-file .circleci/files/frontend.yml \
               --tags project=your-tag \
               --stack-name "udacity-${CIRCLE_WORKFLOW_ID}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}" \
-              --region us-east-1 
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Add back-end ip to ansible inventory
           command: |
