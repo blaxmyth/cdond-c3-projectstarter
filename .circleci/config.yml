@@ -120,8 +120,8 @@ jobs:
           command: |
               # Your code here
               cd ~/project/backend
-              npm audit --audit-level=critical
-              npm audit fix --audit-level=critical --prefix backend
+              # npm audit --audit-level=critical
+              npm audit fix --audit-level=critical
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -137,8 +137,9 @@ jobs:
           name: Scan front-end
           command: |
               # Your code here
-              npm audit --audit-level=critical
-              npm audit fix --audit-level=critical --prefix frontend
+              cd ~/project/frontend
+              # npm audit --audit-level=critical
+              npm audit fix --audit-level=critical
 
   deploy-infrastructure:
     docker:
