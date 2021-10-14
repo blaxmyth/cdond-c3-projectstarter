@@ -99,24 +99,7 @@ jobs:
           command: |
             # Your code here
             npm i --prefix frontend
-            
-  scan-frontend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      # Checkout code from git
-      - checkout
-      # Restore from cache
-      - restore_cache:
-          keys:
-            - frontend-build
-      # Your job code here
-      # - run:
-      #     name: Scan front-end
-      #     command: |
-      #         # Your code here
-      #         npm audit fix --audit-level=critical --prefix frontend
-
+  
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -128,11 +111,27 @@ jobs:
           keys:
             - backend-build
       # Your job code here
-      # - run:
-      #     name: Build front-end
-      #     command: |
-      #         # Your code here
-      #         npm audit fix --audit-level=critical --prefix frontend
+      - run:
+          name: Build front-end
+          command: |
+              # Your code here
+              npm audit fix --audit-level=critical --prefix backend
+  scan-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      - restore_cache:
+          keys:
+            - frontend-build
+      # Your job code here
+      - run:
+          name: Scan front-end
+          command: |
+              # Your code here
+              npm audit fix --audit-level=critical --prefix frontend
 
   deploy-infrastructure:
     docker:
