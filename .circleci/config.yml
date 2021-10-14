@@ -81,8 +81,8 @@ jobs:
           name: Build back-end
           command: |
             # Your code here
-            npm i --prefix backend
-            npm run test --prefix backend
+            # npm i --prefix backend
+            # npm run test --prefix backend
 
   test-frontend:
     docker:
@@ -99,8 +99,8 @@ jobs:
           name: Build front-end
           command: |
             # Your code here
-            npm i --prefix frontend
-            npm run test --prefix frontend
+            # npm i --prefix frontend
+            # npm run test --prefix frontend
   
   scan-backend:
     docker:
