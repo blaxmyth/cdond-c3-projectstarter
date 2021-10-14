@@ -155,7 +155,7 @@ jobs:
               aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
               aws configure set region $AWS_REGION
       - run:
-          name: Ensure back-end infrastructure exists
+          name: Deploy back-end infrastructure
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
@@ -163,7 +163,7 @@ jobs:
               --stack-name "udacity-backend-${CIRCLE_WORKFLOW_ID}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
       - run:
-          name: Ensure front-end infrastructure exist
+          name: Deploy front-end infrastructure
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
@@ -190,25 +190,28 @@ jobs:
       # - destroy_environment:
       #     workflow_id: "${CIRCLE_WORKFLOW_ID}"      
 
-  # configure-infrastructure:
-  #   docker:
-  #     - image: ansible/ansible
-  #   steps:
-  #     - checkout
-  #     # Checkout code from git
-  #     # Add ssh keys with fingerprint
-  #     # attach workspace
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-  #           # Your code here
-  #           exit 1
-  #     - run:
-  #         name: Configure server
-  #         command: |
-  #           # Your code here
-  #           exit 1
-  #     # Here's where you will add some code to rollback on failure      
+  configure-infrastructure:
+    docker:
+      - image: ansible/ansible
+    steps:
+      - checkout
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ["12:08:c6:f2:62:2a:6f:9a:1f:fa:78:5d:6f:aa:81:d1"]
+      # attach workspace
+      - run:
+          name: Install dependencies
+          command: |
+            # Your code here
+            apk add --update curl nodejs npm ansible zip
+            pip install awscli
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            exit 1
+      # Here's where you will add some code to rollback on failure      
 
   # run-migrations:
   #   docker:
@@ -347,8 +350,8 @@ workflows:
           filters:
             branches:
               only: [master]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
