@@ -133,6 +133,7 @@ jobs:
           name: Scan front-end
           command: |
               # Your code here
+              npm install -g npm-install-missing
               npm audit fix --audit-level=critical --prefix frontend
 
   deploy-infrastructure:
