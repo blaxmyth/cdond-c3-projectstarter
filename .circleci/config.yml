@@ -82,6 +82,7 @@ jobs:
           command: |
             # Your code here
             npm i --prefix backend
+            npm run test --prefix backend
 
   test-frontend:
     docker:
@@ -99,6 +100,7 @@ jobs:
           command: |
             # Your code here
             npm i --prefix frontend
+            npm run test --prefix frontend
   
   scan-backend:
     docker:
