@@ -82,6 +82,7 @@ jobs:
           command: |
             # Your code here
             npm i --prefix backend
+            rm 
 
   test-frontend:
     docker:
@@ -104,8 +105,8 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - checkout
       # Checkout code from git
+      - checkout
       # Restore from cache
       - restore_cache:
           keys:
@@ -115,14 +116,15 @@ jobs:
           name: Scan front-end
           command: |
               # Your code here
+              rm package-lock.json
               npm audit fix --audit-level=critical --prefix frontend
 
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - checkout
       # Checkout code from git
+      - checkout
       # Restore from cache
       - restore_cache:
           keys:
@@ -132,6 +134,7 @@ jobs:
           name: Build front-end
           command: |
               # Your code here
+              rm package-lock.json
               npm audit fix --audit-level=critical --prefix frontend
 
   deploy-infrastructure:
@@ -318,9 +321,9 @@ workflows:
       - test-backend:
           requires: [build-backend]
       - scan-backend:
-          requires: [build-backend]
+          requires: [test-backend]
       - scan-frontend:
-          requires: [build-frontend]
+          requires: [test-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
