@@ -114,7 +114,7 @@ jobs:
             - backend-build
       # Your job code here
       - run:
-          name: Scan front-end
+          name: Scan back-end
           command: |
               # Your code here
               npm audit fix --audit-level=critical --prefix backend
