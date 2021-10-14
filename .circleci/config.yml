@@ -112,7 +112,6 @@ jobs:
             - frontend-build
       # Your job code here
       - run: 
-          name: Scan front-end
           command: |
               # Your code here
               npm audit fix --audit-level=critical --prefix frontend
@@ -129,8 +128,7 @@ jobs:
           keys:
             - backend-build
       # Your job code here
-      - run: npm audit fix --audit-level=critical --prefix backend
-          name: Scan back-end
+      - run:
           command: |
                 # Your code here
                 npm audit fix --audit-level=critical --prefix frontend
