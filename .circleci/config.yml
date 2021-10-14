@@ -82,7 +82,6 @@ jobs:
           command: |
             # Your code here
             npm i --prefix backend
-            rm 
 
   test-frontend:
     docker:
