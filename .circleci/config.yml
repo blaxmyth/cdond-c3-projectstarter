@@ -128,13 +128,13 @@ jobs:
       - restore_cache:
           keys:
             - frontend-build
-      # Your job code here
-      - run:
-          name: Scan front-end
-          command: |
-              # Your code here
-              sudo npm install -g npm-install-missing
-              npm audit fix --audit-level=critical --prefix frontend
+      # # Your job code here
+      # - run:
+      #     name: Scan front-end
+      #     command: |
+      #         # Your code here
+      #         # npm install -g npm-install-missing
+      #         npm audit fix --audit-level=critical --prefix frontend
 
   deploy-infrastructure:
     docker:
