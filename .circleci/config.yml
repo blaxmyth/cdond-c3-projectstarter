@@ -111,12 +111,11 @@ jobs:
           keys:
             - frontend-build
       # Your job code here
-      - run:
-          name: Scan front-end
-          command: |
-              # Your code here
-              rm package-lock.json
-              npm audit fix --audit-level=critical --prefix frontend
+      # - run:
+      #     name: Scan front-end
+      #     command: |
+      #         # Your code here
+      #         npm audit fix --audit-level=critical --prefix frontend
 
   scan-backend:
     docker:
@@ -129,12 +128,11 @@ jobs:
           keys:
             - backend-build
       # Your job code here
-      - run:
-          name: Build front-end
-          command: |
-              # Your code here
-              rm package-lock.json
-              npm audit fix --audit-level=critical --prefix frontend
+      # - run:
+      #     name: Build front-end
+      #     command: |
+      #         # Your code here
+      #         npm audit fix --audit-level=critical --prefix frontend
 
   deploy-infrastructure:
     docker:
