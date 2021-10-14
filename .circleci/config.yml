@@ -192,7 +192,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: ansible/ansible
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       # Checkout code from git
@@ -204,14 +204,15 @@ jobs:
           name: Install dependencies
           command: |
             # Your code here
-            apk add --update curl nodejs npm ansible zip
-            pip install awscli
+            apk add --update ansible
       - run:
           name: Configure server
           command: |
             # Your code here
-            exit 1
-      # Here's where you will add some code to rollback on failure      
+            ansible-playbook -i inventory.txt playbook.yml
+      # Here's where you will add some code to rollback on failure   
+      # - destroy_environment:
+      #     workflow_id: "${CIRCLE_WORKFLOW_ID}"      
 
   # run-migrations:
   #   docker:
