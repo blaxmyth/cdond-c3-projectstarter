@@ -226,7 +226,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key:
+          keys:
             - backend-build
       - attach_workspace:
           at: ~/
