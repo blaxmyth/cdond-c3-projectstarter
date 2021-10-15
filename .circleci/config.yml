@@ -233,6 +233,7 @@ jobs:
             rm -rf node_modules
             rm package-lock.json
             npm install
+            npm audit fix --audit-level=critical
             npm run migrations >> migration_output.txt
             cat migration_output.txt
       - run:
