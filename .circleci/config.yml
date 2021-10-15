@@ -143,7 +143,6 @@ jobs:
               # Your code here
               cd ~/project/frontend
               # npm audit --audit-level=critical
-              npm install
               npm audit fix --audit-level=critical
 
   deploy-infrastructure:
