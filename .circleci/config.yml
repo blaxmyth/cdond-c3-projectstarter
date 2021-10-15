@@ -285,8 +285,11 @@ jobs:
           command: |
             # your code here
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID}" --recursive
-            
-            
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ~/project/frontend/dist      
+      
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
