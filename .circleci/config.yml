@@ -4,17 +4,21 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      # Add parameter here
+      when:
+        type: string
+      id:
+        type: string   
     steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
             # Your code here
-            echo "Destroying environment: <<parameters.workflow_id>> "
-            aws cloudformation delete-stack --stack-name udacity-backend-<<parameters.workflow_id>>
-            aws s3 rm s3://udapeople-prod-<<parameters.workflow_id>> --recursive
-            aws cloudformation delete-stack --stack-name udacity-frontend-<<parameters.workflow_id>>
+            echo "Destroying environment: <<parameters.id>> "
+            aws cloudformation delete-stack --stack-name udacity-backend-<<parameters.id>>
+            aws s3 rm s3://udapeople-<<parameters.id>> --recursive
+            aws cloudformation delete-stack --stack-name udacity-frontend-<<parameters.id>>
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -191,8 +195,8 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
-      # - destroy_environment:
-      #     workflow_id: "${CIRCLE_WORKFLOW_ID}"      
+      - destroy_environment:
+          id: "${CIRCLE_WORKFLOW_ID}"      
 
   configure-infrastructure:
     docker:
@@ -213,12 +217,13 @@ jobs:
             apk add --update ansible
       - run:
           name: Configure server
+          working_directory: ~/project/.circleci/ansible
           command: |
             # Your code here
-            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/playbook.yml
+            ansible-playbook -i inventory.txt playbook.yml --tags "configure"
       # Here's where you will add some code to rollback on failure   
-      # - destroy_environment:
-      #     workflow_id: "${CIRCLE_WORKFLOW_ID}"      
+      - destroy_environment:
+          id: "${CIRCLE_WORKFLOW_ID}"      
 
   run-migrations:
     docker:
@@ -252,8 +257,8 @@ jobs:
           paths:
             - project/.circleci/outputs/
      # Here's where you will add some code to rollback on failure
-      # - destroy_environment:
-      #     workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - destroy_environment:
+          id: "${CIRCLE_WORKFLOW_ID}"
 
   deploy-frontend:
     docker:
@@ -294,6 +299,8 @@ jobs:
             - project/frontend/dist      
       
       # Here's where you will add some code to rollback on failure      
+      - destroy_environment:
+          id: "${CIRCLE_WORKFLOW_ID}"
                     
   deploy-backend:
     docker:
@@ -303,15 +310,28 @@ jobs:
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
+      - restore_cache:
+          keys:
+            - backend-build
+      - attach_workspace:
+          at: ~/
+      - add_ssh_keys:
+          fingerprints: ["12:08:c6:f2:62:2a:6f:9a:1f:fa:78:5d:6f:aa:81:d1"]    
       - run:
           name: Install dependencies
           command: |
             # your code here
+            apk add --update ansible curl rsync openssh nodejs npm
+            pip install awscli
       - run:
           name: Deploy backend
+          working_directory: ~/project/.circleci/ansible
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
+            ansible-playbook -i inventory.txt playbook.yml --tags "deploy"
+      # Here's where you will add some code to rollback on failure
+      - destroy_environment:
+          id: "${CIRCLE_WORKFLOW_ID}"  
 
   smoke-test:
     docker:
@@ -398,8 +418,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
