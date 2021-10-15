@@ -225,6 +225,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          key: [backend-build]
       - attach_workspace:
           at: ~/
       # Checkout code from git
@@ -244,6 +246,7 @@ jobs:
             then
               touch ~/project/.circleci/outputs/db_migration_success
             fi
+      
       - persist_to_workspace:
           root: ~/
           paths:
