@@ -229,6 +229,10 @@ jobs:
           command: |
             # Your code here
             cd backend
+            npm cache clean
+            rm -rf node_modules
+            rm package-lock.json
+            npm install
             npm run migrations >> migration_output.txt
             cat migration_output.txt
       - run:
@@ -250,14 +254,18 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       # Checkout code from git
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
             # your code here
+            apk add --update curl nodejs npm tar
+            pip install awscli
       - run:
           name: Get backend url
           command: |
@@ -272,7 +280,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      - image: ansible/ansible
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       # Checkout code from git
