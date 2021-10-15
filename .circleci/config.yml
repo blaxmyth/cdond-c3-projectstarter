@@ -49,6 +49,7 @@ jobs:
             name: Back-end build
             command: |
               # Your code here
+              cd ~/project/backend
               npm i --prefix backend
               npm run build
         - save_cache:
@@ -66,6 +67,7 @@ jobs:
           name: Build front-end
           command: |
             # Your code here
+            cd ~/project/frontend
             npm i --prefix frontend
             npm run build
       - save_cache:
