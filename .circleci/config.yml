@@ -143,6 +143,7 @@ jobs:
               # Your code here
               cd ~/project/frontend
               # npm audit --audit-level=critical
+              npm install
               npm audit fix --audit-level=critical
 
   deploy-infrastructure:
@@ -272,11 +273,11 @@ jobs:
             sudo ./aws/install
       - run:
           name: Get backend url and bake into frontend
+          working_directory: ~/project/frontend
           command: |
             # your code here
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            cd ~/project/frontend
             npm run build
       - run:
           name: Deploy frontend objects to S3
@@ -285,9 +286,9 @@ jobs:
             # your code here
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID}" --recursive
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - ~/project/frontend/dist      
+            - project/frontend/dist      
       
       # Here's where you will add some code to rollback on failure      
                     
