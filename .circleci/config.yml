@@ -50,6 +50,7 @@ jobs:
             command: |
               # Your code here
               npm i --prefix backend
+              npm run build
         - save_cache:
             paths: [backend/node_modules]
             key: backend-build
@@ -66,6 +67,7 @@ jobs:
           command: |
             # Your code here
             npm i --prefix frontend
+            npm run build
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -229,11 +231,6 @@ jobs:
           command: |
             # Your code here
             cd backend
-            npm cache clean --force
-            rm -rf node_modules
-            rm package-lock.json
-            npm install
-            npm audit fix --audit-level=critical
             npm run migrations >> migration_output.txt
             cat migration_output.txt
       - run:
@@ -378,8 +375,8 @@ workflows:
               only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
+      # - run-migrations:
+      #     requires: [configure-infrastructure]
       # - deploy-frontend:
           # requires: [run-migrations]
       # - deploy-backend:
