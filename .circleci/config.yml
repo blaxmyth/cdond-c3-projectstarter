@@ -235,14 +235,14 @@ jobs:
           name: Run migrations
           command: |
             # Your code here
-            cd backend
+            cd ~/project/backend
             npm run migrations >> migration_output.txt
             cat migration_output.txt
       - run:
           name: Send migration results to file
           command: |
             # Your code here
-            cd backend
+            cd ~/project/backend
             if grep -q "has been executed successfully." migration_output.txt
             then
               touch ~/project/.circleci/outputs/db_migration_success
@@ -257,28 +257,36 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
       - attach_workspace:
           at: ~/
       - run:
-          name: Install dependencies
+          name: Install AWS CLI
           command: |
             # your code here
-            apk add --update curl nodejs npm tar
-            pip install awscli
+            sudo apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
       - run:
-          name: Get backend url
+          name: Get backend url and bake into frontend
           command: |
             # your code here
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
+            cd ~/project/frontend
+            npm run build
       - run:
-          name: Deploy frontend objects
+          name: Deploy frontend objects to S3
+          working_directory: ~/project/frontend
           command: |
             # your code here
+            aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID}" --recursive
+            
+            
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -382,10 +390,10 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-          # requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
       # - deploy-backend:
-          # requires: [run-migrations]
+      #     requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
