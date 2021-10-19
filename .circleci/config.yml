@@ -391,11 +391,11 @@ jobs:
             aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             aws configure set region $AWS_REGION
 
-            export OldWorkflowID=$(aws ~/.circleci/files/cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text)
+            # export OldWorkflowID=$(aws ~/.circleci/files/cloudformation \
+            #   list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            #   --no-paginate --output text)
 
-            echo OldWorkflowID: "${OldWorkflowID}"
+            # echo OldWorkflowID: "${OldWorkflowID}"
 
             aws cloudformation deploy \
               --template-file ~/.circleci/files/cloudfront.yaml \
