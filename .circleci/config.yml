@@ -428,14 +428,15 @@ jobs:
               export CurrentWorkflowID=${CIRCLE_WORKFLOW_ID}
 
               echo $OldWorkflowID
-              echo ${CIRCLE_WORKFLOW_ID:0:7}
+              echo $CurrentWorkflowID
+              echo ${CIRCLE_WORKFLOW_ID}
         - run:
             name: Remove old stacks and files
             command: |
-              # if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
+              # if [[ "${CIRCLE_WORKFLOW_ID}" != "$OldWorkflowID" ]]
               # then
                 # your code here
-              echo "{$OldWorkflowID!}=$CurrentWorkflowID => will delete old version"
+              echo "${$OldWorkflowID}!=$CurrentWorkflowID => will delete old version"
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
