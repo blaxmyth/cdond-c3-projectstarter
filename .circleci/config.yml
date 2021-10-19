@@ -14,6 +14,9 @@ commands:
           command: |
             # Your code here
             echo "Destroying environment: <<parameters.id>> "
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set region $AWS_REGION
             aws cloudformation delete-stack --stack-name udacity-backend-<<parameters.id>>
             aws s3 rm s3://udapeople-<<parameters.id>> --recursive
             aws cloudformation delete-stack --stack-name udacity-frontend-<<parameters.id>>
