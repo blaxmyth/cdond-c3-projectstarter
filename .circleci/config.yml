@@ -194,7 +194,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
             - project/.circleci/outputs/backend_url.txt
       # Here's where you will add some code to rollback on failure
-      - destroy_environment:
+      - destroy-environment:
           id: "${CIRCLE_WORKFLOW_ID}"      
 
   configure-infrastructure:
@@ -221,7 +221,7 @@ jobs:
             # Your code here
             ansible-playbook -i inventory.txt playbook.yml --tags "configure"
       # Here's where you will add some code to rollback on failure   
-      - destroy_environment:
+      - destroy-environment:
           id: "${CIRCLE_WORKFLOW_ID}"      
 
   run-migrations:
@@ -256,7 +256,7 @@ jobs:
           paths:
             - project/.circleci/outputs/
      # Here's where you will add some code to rollback on failure
-      - destroy_environment:
+      - destroy-environment:
           id: "${CIRCLE_WORKFLOW_ID}"
 
   deploy-frontend:
@@ -298,7 +298,7 @@ jobs:
             - project/frontend/dist      
       
       # Here's where you will add some code to rollback on failure      
-      - destroy_environment:
+      - destroy-environment:
           id: "${CIRCLE_WORKFLOW_ID}"
                     
   deploy-backend:
@@ -329,7 +329,7 @@ jobs:
             # your code here
             ansible-playbook -i inventory.txt playbook.yml --tags "deploy"
       # Here's where you will add some code to rollback on failure
-      - destroy_environment:
+      - destroy-environment:
           id: "${CIRCLE_WORKFLOW_ID}"  
 
   smoke-test:
@@ -363,7 +363,7 @@ jobs:
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website.us-east-1.amazonaws.com/index.html"
             curl -s ${URL} | grep -q "Welcome"
       # Here's where you will add some code to rollback on failure  
-      - destroy_environment:
+      - destroy-environment:
           id: "${CIRCLE_WORKFLOW_ID}"
       # - revert_migrations:
       #     id: ${CIRCLE_WORKFLOW_ID}
