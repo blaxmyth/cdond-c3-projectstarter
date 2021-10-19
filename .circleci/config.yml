@@ -52,9 +52,9 @@ jobs:
             keys: [backend-build]
         - run:
             name: Back-end build
+            working_directory: ~/project/backend
             command: |
               # Your code here
-              cd ~/project/backend
               npm i --prefix backend
               npm run build
         - save_cache:
@@ -70,9 +70,9 @@ jobs:
           keys: [frontend-build]
       - run:
           name: Build front-end
+          working_directory: ~/project/frontend
           command: |
             # Your code here
-            cd ~/project/frontend
             npm i --prefix frontend
             npm run build
       - save_cache:
@@ -92,6 +92,7 @@ jobs:
             - backend-build
       - run:
           name: Test back-end
+          working_directory: ~/project/backend
           command: |
             # Your code here
             npm run test --prefix backend
@@ -109,6 +110,7 @@ jobs:
             - frontend-build
       - run:
           name: Test front-end
+          working_directory: ~/project/frontend
           command: |
             # Your code here
             npm run test --prefix frontend
@@ -126,10 +128,9 @@ jobs:
       # Your job code here
       - run:
           name: Scan back-end
+          working_directory: ~/project/backend
           command: |
               # Your code here
-              cd ~/project/backend
-              # npm audit --audit-level=critical
               npm audit fix --audit-level=critical
   scan-frontend:
     docker:
@@ -144,10 +145,9 @@ jobs:
       # Your job code here
       - run:
           name: Scan front-end
+          working_directory: ~/project/frontend
           command: |
               # Your code here
-              cd ~/project/frontend
-              # npm audit --audit-level=critical
               npm install
               npm audit fix --audit-level=critical
 
@@ -423,16 +423,19 @@ jobs:
               export OldWorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name=='WorkflowID'].Value" \
               --no-paginate --output text)
-              
+
               export STACKS=[] #put the list of stacks here
               export CurrentWorkflowID=${CIRCLE_WORKFLOW_ID}
+
+              echo $OldWorkflowID
+              echo ${CIRCLE_WORKFLOW_ID:0:7}
         - run:
             name: Remove old stacks and files
             command: |
               # if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
               # then
                 # your code here
-              echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
+              echo "{$OldWorkflowID!}=$CurrentWorkflowID => will delete old version"
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
