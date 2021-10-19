@@ -55,7 +55,7 @@ jobs:
             working_directory: ~/project/backend
             command: |
               # Your code here
-              npm i --prefix backend
+              npm i
               npm run build
         - save_cache:
             paths: [backend/node_modules]
@@ -73,7 +73,7 @@ jobs:
           working_directory: ~/project/frontend
           command: |
             # Your code here
-            npm i --prefix frontend
+            npm i
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -95,7 +95,7 @@ jobs:
           working_directory: ~/project/backend
           command: |
             # Your code here
-            npm run test --prefix backend
+            npm run test
 
   test-frontend:
     docker:
@@ -113,7 +113,7 @@ jobs:
           working_directory: ~/project/frontend
           command: |
             # Your code here
-            npm run test --prefix frontend
+            npm run test
   
   scan-backend:
     docker:
