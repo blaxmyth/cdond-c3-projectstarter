@@ -1,43 +1,47 @@
 ---
 
-- name: "Creates backend app directory"
+- name: "update apt packages."
   become: yes
-  file:
-    path: ~/backend_app
-    state: directory
+  apt:
+    update_cache: yes
+# - name: "Creates backend app directory"
+#   become: yes
+#   file:
+#     path: ~/backend_app
+#     state: directory
 
-- name: "Copy compiled backend app"
-  become: yes
-  copy:
-    src: dist.zip
-    dest: "~/backend_app/dist.zip"
+# - name: "Copy compiled backend app"
+#   become: yes
+#   copy:
+#     src: dist.zip
+#     dest: "~/backend_app/dist.zip"
 
-- name: "Unzip backend files to correct directory"
-  become: yes
-  shell: |
-    cd ~/backend_app
-    unzip dist.zip
-    rm -rf dist.zip
+# - name: "Unzip backend files to correct directory"
+#   become: yes
+#   shell: |
+#     cd ~/backend_app
+#     unzip dist.zip
+#     rm -rf dist.zip
 
-- name: "Install dependencies for project"
-  become: yes
-  shell: |
-    cd ~/backend_app
-    npm install
+# - name: "Install dependencies for project"
+#   become: yes
+#   shell: |
+#     cd ~/backend_app
+#     npm install
     
-- name: "Executing node"
-  become: yes
-  shell: |
-    export
-    cd ~/backend_app
-    pm2 start main.js
-  register: execute_node
+# - name: "Executing node"
+#   become: yes
+#   shell: |
+#     export
+#     cd ~/backend_app
+#     pm2 start main.js
+#   register: execute_node
 
-- name: print message
-  debug:
-    msg: "{{ execute_node.stdout_lines }}"
+# - name: print message
+#   debug:
+#     msg: "{{ execute_node.stdout_lines }}"
 
-- name: "Configure pm2 to start as service"
-  become: yes
-  shell: |
-    env PATH=$PATH:/usr/local/bin pm2 startup -u ubuntu
+# - name: "Configure pm2 to start as service"
+#   become: yes
+#   shell: |
+#     env PATH=$PATH:/usr/local/bin pm2 startup -u ubuntu
