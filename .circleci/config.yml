@@ -345,7 +345,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update ansible curl rsync openssh nodejs npm zip
+            apk add --update ansible curl nodejs npm zip
             pip install awscli
       - run:
           name: Deploy backend
@@ -362,7 +362,7 @@ jobs:
 
             ls ~/project/.circleci/ansible/roles/deploy-backend/files/
             cd ~/project/backend
-            cat ~/project/.circleci/ansible/inventory
+            cat ~/project/.circleci/ansible/inventory.txt
             ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/playbook.yml --tags "deploy" -vv
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
