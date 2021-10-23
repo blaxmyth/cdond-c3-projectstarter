@@ -25,7 +25,7 @@
 - name: "Install zip utility."
   become: yes
   apt:
-    name: [ "zip", "unzip" ]
+    name: [ "zip", "unzip", "tar", "gzip" ]
     state: latest
     update_cache: yes
 

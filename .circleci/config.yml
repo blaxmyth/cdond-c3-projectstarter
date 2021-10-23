@@ -60,6 +60,11 @@ jobs:
         - save_cache:
             paths: [backend/node_modules]
             key: backend-build
+        - persist_to_workspace:
+            root: ~/
+            paths:
+              - project/backend/dist
+              - project/backend/node_modules    
 
   build-frontend:
     docker:
@@ -78,6 +83,10 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - persist_to_workspace:
+            root: ~/
+            paths:
+              - project/frontend/node_modules     
 
   test-backend:
     docker:
@@ -87,6 +96,8 @@ jobs:
       # Checkout code from git
       # Restore from cache
       # Your job code here
+      - attach_workspace:
+          at: ~/
       - restore_cache:
           keys:
             - backend-build
@@ -105,6 +116,8 @@ jobs:
       # Checkout code from git
       # Restore from cache
       # Your job code here
+      - attach_workspace:
+          at: ~/
       - restore_cache:
           keys:
             - frontend-build
@@ -122,6 +135,8 @@ jobs:
       # Checkout code from git
       - checkout
       # Restore from cache
+      - attach_workspace:
+          at: ~/
       - restore_cache:
           keys:
             - backend-build
@@ -139,6 +154,8 @@ jobs:
       # Checkout code from git
       - checkout
       # Restore from cache
+      - attach_workspace:
+          at: ~/
       - restore_cache:
           keys:
             - frontend-build
@@ -332,9 +349,20 @@ jobs:
             pip install awscli
       - run:
           name: Deploy backend
-          working_directory: ~/project/.circleci/ansible
+          working_directory: ~/project/backend
           command: |
             # your code here
+            npm i
+            npm run build
+            cd dist
+
+            zip -rq dist.zip
+            mkdir -p ~/project/.circleci/ansible/roles/deploy_backend/files/
+            mv dist.zip ~/project/.circleci/ansible/roles/deploy_backend/files/
+            
+            cd .circleci/ansible
+
+            cat inventory
             ansible-playbook -i inventory.txt playbook.yml --tags "deploy" -vv
       # Here's where you will add some code to rollback on failure
       # - destroy-environment:
