@@ -33,8 +33,8 @@
   register: execute_node
 
 - name: list pm2 processes
-  debug:
-    shell: pm2 list
+  become: yes
+  shell: pm2 list
 
 - name: print message
   debug:
