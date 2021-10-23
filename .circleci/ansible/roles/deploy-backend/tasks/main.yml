@@ -1,7 +1,6 @@
 ---
 
 - name: "show remote environment"
-  become: yes
   shell: |
     env
     pwd
