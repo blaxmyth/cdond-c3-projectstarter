@@ -4,4 +4,16 @@ https://github.com/blaxmyth/cdond-c3-projectstarter.git
 
 Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
 
-http://udapeople-000b6199-efa0-493e-ab58-0097edfd0799.s3-website-us-east-1.amazonaws.com/
+http://udapeople-3b4b86cd-6390-4b13-b420-466944f32943.s3-website-us-east-1.amazonaws.com
+
+Cloudfront URL
+
+http://d1owu55i01l7tu.cloudfront.net/index.html#/employees
+
+Backend API URL
+
+http://54.242.218.131:3030/api/status
+
+Prometheus Server
+
+http://ec2-34-207-145-21.compute-1.amazonaws.com:9090/graph
