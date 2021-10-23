@@ -357,16 +357,16 @@ jobs:
             cd dist
 
             zip -rq dist.zip
-            mkdir -p ~/project/.circleci/ansible/roles/deploy_backend/files/
-            mv dist.zip ~/project/.circleci/ansible/roles/deploy_backend/files/
-            
-            cd .circleci/ansible
+            mkdir -p ~/project/.circleci/ansible/roles/deploy-backend/files/
+            mv dist.zip ~/project/.circleci/ansible/roles/deploy-backend/files/
 
-            cat inventory
-            ansible-playbook -i inventory.txt playbook.yml --tags "deploy" -vv
+            ls ~/project/.circleci/ansible/roles/deploy-backend/files/
+            cd ~/project/backend
+            cat ~/project/.circleci/ansible/inventory
+            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/playbook.yml --tags "deploy" -vv
       # Here's where you will add some code to rollback on failure
-      # - destroy-environment:
-      #     id: "${CIRCLE_WORKFLOW_ID}"  
+      - destroy-environment:
+          id: "${CIRCLE_WORKFLOW_ID}"  
 
   # smoke-test:
   #   docker:
